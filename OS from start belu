@@ -1,0 +1,53 @@
+#' Aim : OS from belu initiation
+#' Project : Belumosudil
+#' Author : Sophie Le Grand
+
+#'Require
+#'Data management
+library(readxl)
+library(tidyverse)
+#'Survival analysis
+library(ggsurvfit)
+library(ggplot2)
+library(survminer)
+library(survival)
+library(RColorBrewer)
+
+#' OS from HSCT preemptiv 
+#'Load files
+mdata = read_excel("Dropbox/belumosudil/recueil/database rezurock.xlsx") %>%
+  select(Follow_up_inmonths, OS, LAST_FOLLOWUP_DATE, BELU_START_DATE)
+
+mdata$LFU_CALC = as.numeric(difftime(mdata$LAST_FOLLOWUP_DATE, mdata$BELU_START_DATE, units = "days")) 
+mdata$LFU_CALC = (mdata$LFU_CALC)/30.3
+#'Survival analysis
+logtest_OS = Surv(mdata$LFU_CALC, as.numeric(mdata$OS))
+
+surv_OS = survfit2(data = mdata, logtest_OS ~ 1) %>%
+  ggsurvplot(
+    palette = "#0C7BDC",
+    surv.median.line = "hv", 
+    conf.int = FALSE,
+    font.main = c(16, "plain", "black"),
+    font.x = c(16,"plain",  "black"),
+    font.y = c(16, "plain","black"),
+    font.tickslab = c(16, "plain", "black"),
+    ggtheme = theme_bw(), 
+    censor.size = 10,
+    xlim = c(0, 18),
+    break.time.by = 2,  
+    xlab = "Time (months)",   
+    title = "OS from start belu, med follow up = 11.2 months", 
+    tables.height = 0.2,
+    tables.theme = theme_cleantable(),
+    risk.table = "abs_pct", 
+    risk.table.y.text = FALSE
+  )
+print(surv_OS)
+
+pdf("Dropbox/Tmp Sophie/OS_StartBelu.pdf", width = 10, height = 6)
+print(surv_OS)
+dev.off()
+
+summary( survfit2(data = mdata, logtest_OS ~ 1), times = (0:18))
+
