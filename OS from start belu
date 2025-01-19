@@ -19,7 +19,7 @@ mdata = read_excel("Dropbox/belumosudil/recueil/database rezurock.xlsx") %>%
   select(Follow_up_inmonths, OS, LAST_FOLLOWUP_DATE, BELU_START_DATE)
 
 mdata$LFU_CALC = as.numeric(difftime(mdata$LAST_FOLLOWUP_DATE, mdata$BELU_START_DATE, units = "days")) 
-mdata$LFU_CALC = (mdata$LFU_CALC)/30.3
+mdata$LFU_CALC = (mdata$LFU_CALC)/30.44
 #'Survival analysis
 logtest_OS = Surv(mdata$LFU_CALC, as.numeric(mdata$OS))
 
