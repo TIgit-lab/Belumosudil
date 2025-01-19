@@ -17,8 +17,7 @@ library(RColorBrewer)
 mdata = read_excel("Dropbox/belumosudil/database rezurock.xlsx") %>%
   select(Follow_up_inmonths, OS, LAST_FOLLOWUP_DATE, GREFFE_DATE)
 
-mdata$LFU_CALC = as.numeric(difftime(mdata$LAST_FOLLOWUP_DATE, mdata$GREFFE_DATE, units = "days")) %>%
-  replace_na(4000)
+mdata$LFU_CALC = as.numeric(difftime(mdata$LAST_FOLLOWUP_DATE, mdata$GREFFE_DATE, units = "days")) 
 mdata$LFU_CALC = (mdata$LFU_CALC)/365.25
 #'Survival analysis
 logtest_OS = Surv(mdata$LFU_CALC, as.numeric(mdata$OS))
