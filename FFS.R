@@ -16,7 +16,7 @@ library(RColorBrewer)
 #'Load files
 mdata = read_excel("Dropbox/belumosudil/database rezurock.xlsx") %>%
   select(CENTRE, FIRSTNAME, Follow_up_inmonths, FFS, delay_belu_last_followup, BELU_START_DATE, LAST_FOLLOWUP_DATE)
-mdata$delay_belu_last_followup = (mdata$delay_belu_last_followup)/30.44
+mdata$delay_belu_last_followup = (mdata$delay_belu_last_followup)/30.4375
 #'Survival analysis
 logtest_FFS = Surv(mdata$delay_belu_last_followup, as.numeric(mdata$FFS))
 
